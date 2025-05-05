@@ -8,6 +8,10 @@ from pyramid_app_caseinterview.models.timeseries import Timeseries
 
 from . import View
 
+# from opentelemetry import trace
+import logging
+
+logger = logging.getLogger(__name__)
 
 class API(View):
     """API endpoints"""
@@ -36,6 +40,7 @@ class API(View):
         request_method="GET",
     )
     def depthseries_api(self):
+        logger.info("Inside depthseries")
         query = self.session.query(Depthseries)
         return [
             {

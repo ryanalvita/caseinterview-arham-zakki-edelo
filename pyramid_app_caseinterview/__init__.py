@@ -11,6 +11,10 @@ from pyramid.config import Configurator
 from pyramid.events import NewRequest
 from pyramid.settings import asbool
 
+# OpenTelemetry & Instrumentation
+from opentelemetry.instrumentation.pyramid import PyramidInstrumentor
+from .telemetry import setup_otel
+
 from pyramid_app_caseinterview.models import (
     get_engine,
     get_session_factory,
@@ -191,6 +195,7 @@ def get_config(settings=None):
 
 def main(global_config, **settings):
     """Return a Pyramid WSGI application."""
+    tracer_provider = setup_otel()
+    PyramidInstrumentor().instrument(tracer_provider=tracer_provider)
     config = get_config(settings=settings)
-
     return config.make_wsgi_app()
