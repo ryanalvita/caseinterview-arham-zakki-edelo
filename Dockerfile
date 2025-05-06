@@ -53,9 +53,6 @@ COPY --chown=me:me . /app
 RUN --mount=type=cache,target=/tmp/cache/pip \
     pip install -e .
 
-# run open telemetry bootstrap
-RUN opentelemetry-bootsrap -a install
-
 # change user and permissions
 RUN chown -R me:me /home/me /app
 

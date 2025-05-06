@@ -9,13 +9,9 @@ A pyramid app for case interview with opentelemetry
 
 Install the environment:
 
-```bash
-rebuild and reopen in docker container
-```
-
 Input Grafana Cloud Credentials in config.alloy:
 
-```bash
+```html
 otelcol.exporter.otlphttp "grafana" {
   client {
     endpoint = "ENDPOINT" << REPLACE ENDPOINT
@@ -29,9 +25,17 @@ otelcol.auth.basic "grafanacloud" {
 }
 ```
 
+```
+rebuild and reopen in docker container
+```
+
 Run the application with alloy
 
-```bash
+```
 ./otel.sh alloy
 ```
-When we open "Traces" Drilldown in Grafana Cloud we see that traces are seperated
+
+try query endpoint
+```
+http://localhost:6599/api/v1/depthseries
+```
