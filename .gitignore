@@ -118,3 +118,12 @@ yarn-error.log*
 
 # Frontend
 app
+app
+
+# Virtual env
+.venv 
+.env
+.env.local.sh
+
+# Ini files for development
+development.ini
