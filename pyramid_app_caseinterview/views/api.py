@@ -23,7 +23,7 @@ class API(View):
         return [
             {
                 "id": str(q.id),
-                "datetime": q.datetime,
+                "datetime": q.datetime.isoformat() if q.datetime else None,
                 "value": q.value,
             }
             for q in query.all()
