@@ -2,12 +2,12 @@
 Ingest Depthseries data form CSV file into database with integrity and clean checks.
 
 Usage:
-  pyramid_app_caseinterview_ingest_depthseries <inifile> --csv-file=<filename> [options]
-  pyramid_app_caseinterview_ingest_depthseries --help
+  pyramid_app_caseinterview_ingest_depthseries_data <inifile> --csv-file=<filename> [options]
+  pyramid_app_caseinterview_ingest_depthseries_data --help
 
 Options:
   -h --help                Show this screen.
-  -o --options=LIST         Comma-separated list of key=value pairs overwriting default setting in initfile.
+  -o --options=LIST        Comma-separated list of key=value pairs overwriting default setting in initfile.
   --csv-file=<filename>    Name of CSV file located in `datadirectory` (from .ini).
   --clear-data             Clear existing depthseries data before ingestion.
 

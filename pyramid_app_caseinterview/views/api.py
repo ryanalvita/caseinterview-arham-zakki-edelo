@@ -38,26 +38,6 @@ class API(View):
         request_method="GET",
     )
     def depthseries_api(self):
-        # ## API layer fixes for duplication problems
-        # # Option 1: By keeping only the first occurrence of each depth
-        # query = self.session.query(Depthseries)
-        # recorded_depths = set()
-        # cleaned_records = []
-        # for q in query.all():
-        #     if q.depth in recorded_depths:
-        #         continue 
-        #     recorded_depths.add(q.depth)
-        #     cleaned_records.append(
-        #         {
-        #             "id": str(q.id),
-        #             "depth": q.depth,
-        #             "value": q.value
-        #         }
-        #     )
-
-        # return cleaned_records
-    
-        # Option 2: By leveraging sqlalchemy functionalities at query time
         sub_query = (
             self.session.query(
                 Depthseries.id,
@@ -69,10 +49,11 @@ class API(View):
                 )
                 .label("rn")
             )
+            .filter(Depthseries.value.isnot(None))
             .subquery()
         )
 
-        # Pick only the first fow
+        # Pick only the first row
         query = self.session.query(
             sub_query.c.id,
             sub_query.c.depth,
@@ -84,6 +65,6 @@ class API(View):
                 "id": str(q.id),
                 "depth": q.depth,
                 "value": q.value
-                }
+            }
                 for q in query.all()
-            ]
+        ]
