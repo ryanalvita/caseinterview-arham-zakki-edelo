@@ -71,7 +71,7 @@ def generate_depthseries_data(num_records:int):
     """
     records = []
     for i in range(num_records):
-        # Depth range from 0 to 50 masl
+        # Depth range from 0 to 50 meters
         depth = i * 50 / (num_records - 1) if num_records > 1 else 0
         # Simulate cone tip resistance (qc, MPa) with realistic variation (2 to 30 Mpa)
         qc = np.clip(np.random.normal(15,5), 2, 30)
