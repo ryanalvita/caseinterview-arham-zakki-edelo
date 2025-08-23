@@ -2,6 +2,7 @@ from sqlalchemy.orm import Query
 
 from typing import Dict, Type
 from pyramid_app_caseinterview.filters.timeseries import timeseries_datetime_filter
+from pyramid_app_caseinterview.filters.depthseries import depthseries_depth_filter
 
 def get_filtered_query(
     model: Type,    
@@ -14,7 +15,7 @@ def get_filtered_query(
     """
     filter_collections = {
         "timeseries_datetime_filter": timeseries_datetime_filter,
-        # Place other filters here
+        "depthseries_depth_filter": depthseries_depth_filter
     }
 
     filter_func = filter_collections.get(filter_type)

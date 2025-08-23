@@ -7,6 +7,7 @@ from pyramid.httpexceptions import HTTPBadRequest
 from pyramid_app_caseinterview.models.depthseries import Depthseries
 from pyramid_app_caseinterview.models.timeseries import Timeseries
 from pyramid_app_caseinterview.filters.services import get_filtered_query
+from pyramid_app_caseinterview.utils.file_writers import write_to_csv
 
 from sqlalchemy import func
 
@@ -25,6 +26,7 @@ class API(View):
     def timeseries_api(self):
         query = self.session.query(Timeseries)
 
+        # Apply URL query filter
         try:
             query = get_filtered_query(Timeseries,
                                        query,
@@ -70,7 +72,7 @@ class API(View):
             sub_query.c.id,
             sub_query.c.depth,
             sub_query.c.value
-        ).filter(sub_query.c.rn == 1)
+            ).filter(sub_query.c.rn == 1)
 
         return [
             {
@@ -80,3 +82,49 @@ class API(View):
             }
                 for q in query.all()
         ]
+    
+    # Download API endpoint
+    @view_config(
+        route_name="download_depthseries",
+        permission=NO_PERMISSION_REQUIRED,
+        request_method="GET"
+    )
+    def download_depthseries(self):
+        query = (
+            self.session.query(
+                Depthseries.id,
+                Depthseries.depth,
+                Depthseries.value,
+                func.row_number()
+                .over(
+                    partition_by=Depthseries.depth,
+                )
+                .label("rn")
+            )
+            .filter(Depthseries.value.isnot(None))
+        )
+
+        # Apply URL query filter
+        try:
+            query = get_filtered_query(Depthseries,
+                                       query,
+                                       self.request.GET,
+                                       filter_type="depthseries_depth_filter"
+                                    )
+        except ValueError as e:
+            raise HTTPBadRequest(json_body={"Error": str(e)})
+        
+        # Create sub query for duplication filtering
+        sub_query = query.subquery()
+
+        # Pick only the first row
+        query = self.session.query(
+            sub_query.c.id,
+            sub_query.c.depth,
+            sub_query.c.value
+            ).filter(sub_query.c.rn == 1)
+        
+        header = ["depth","value"]
+        response = write_to_csv(query, header, "depthseries.csv")
+        return response
+
