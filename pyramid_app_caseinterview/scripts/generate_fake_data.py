@@ -84,6 +84,7 @@ def generate_depthseries_data(num_records:int):
     
     return records
 
+
 def main(argv=None):
     """Generate fake data for timeseries and depthseries tables."""
     args = docopt(__doc__, argv=argv)
