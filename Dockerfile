@@ -1,6 +1,6 @@
 # get python base
 FROM python:3.10-slim-bookworm
-ARG PIP_ACCESS_TOKEN
+#ARG PIP_ACCESS_TOKEN
 # use the same userid in the container as you have outside of the container
 # this avoids permission conflicts when mounting volumes 
 # as default use 1000/1000 as UID/GID, but they can be changed at build time if required
